@@ -1,0 +1,31 @@
+name: Auto Merge Hotfix into Develop
+
+on:
+  push:
+    branches:
+      - main  # Trigger this action when code is pushed to 'main'
+
+jobs:
+  merge_hotfix_to_develop:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with: 
+          fetch-depth: 0
+
+      # Set up Git
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      # Merge the hotfix into develop
+      - name: Merge Hotfix into Develop
+        run: |
+          git checkout develop
+          git pull origin develop
+          git merge main --no-ff --commit -m "Merge hotfix from main into develop"
+          git push origin develop
